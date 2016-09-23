@@ -66,7 +66,7 @@
   </div>
   
   <div id='instructions'>
-    <p>Use the <b>arrow keys</b> to drive the car.</p>
+      <p>Press the <b>"up" arrow key</b> to drive the car.</p>
   </div>
 
   <div id="values_container">
@@ -107,8 +107,8 @@
   	var EnumFeedback = Object.freeze({NO_FEEDBACK: 0, SPLIT_TIME: 1, CONTINUOUS_TIME: 2, SINGLE_TIME: 3}); // This is a class -> http://dailyjs.com/2012/10/01/js-for-node/
   
     // VARIABLES TO UPDATE TO CREATE GAME VARIATION
-	var traffic = true; // true
-	var speedMultiplier = 1.51; // Hack : 1.01 instead of 1 so it doesn't crash on IE and FF
+	var traffic = false; // true
+	var speedMultiplier = 0.15; // Hack : 1.01 instead of 1 so it doesn't crash on IE and FF
 	var feedback = EnumFeedback.NO_FEEDBACK; // EnumFeedback.SPLIT_TIME or EnumFeedback.CONTINUOUS_TIME or EnumFeedback.SINGLE_TIME
 	var narrow = false; // true
 
@@ -723,8 +723,8 @@
       canvas: canvas, render: render, update: update, stats: stats, step: step,
       images: ["background", "sprites"],
       keys: [
-        { keys: [KEY.LEFT,  KEY.A], mode: 'down', action: function() { keyLeft   = true;  } },
-        { keys: [KEY.RIGHT, KEY.D], mode: 'down', action: function() { keyRight  = true;  } },
+        { keys: [KEY.LEFT,  KEY.A], mode: 'down', action: function() { keyLeft   = false;  } },
+        { keys: [KEY.RIGHT, KEY.D], mode: 'down', action: function() { keyRight  = false;  } },
         { keys: [KEY.UP,    KEY.W], mode: 'down', action: function() { keyFaster = true;  } },
         { keys: [KEY.DOWN,  KEY.S], mode: 'down', action: function() { keySlower = true;  } },
         { keys: [KEY.LEFT,  KEY.A], mode: 'up',   action: function() { keyLeft   = false; } },

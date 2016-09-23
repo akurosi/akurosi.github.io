@@ -108,7 +108,7 @@
   
     // VARIABLES TO UPDATE TO CREATE GAME VARIATION
 	var traffic = true; // true
-	var speedMultiplier = 1.51; // Hack : 1.01 instead of 1 so it doesn't crash on IE and FF
+	var speedMultiplier = 15.01; // Hack : 1.01 instead of 1 so it doesn't crash on IE and FF
 	var feedback = EnumFeedback.NO_FEEDBACK; // EnumFeedback.SPLIT_TIME or EnumFeedback.CONTINUOUS_TIME or EnumFeedback.SINGLE_TIME
 	var narrow = false; // true
 
@@ -147,8 +147,8 @@
     var step           = 1/fps;                   // how long is each frame (in seconds)
     var width          = 1024;                    // logical canvas width
     var height         = 768;                     // logical canvas height
-    var centrifugal    = 0.3;                     // centrifugal force multiplier when going around curves
-    var offRoadDecel   = 0.99;                    // speed multiplier when off road (e.g. you lose 2% speed each update frame)
+    var centrifugal    = 1.5;                     // centrifugal force multiplier when going around curves
+    var offRoadDecel   = false;                    // speed multiplier when off road (e.g. you lose 2% speed each update frame)
     var skySpeed       = 0.001;                   // background sky layer scroll speed when going around curve (or up hill)
     var hillSpeed      = 0.002;                   // background hill layer scroll speed when going around curve (or up hill)
     var treeSpeed      = 0.003;                   // background tree layer scroll speed when going around curve (or up hill)
@@ -178,12 +178,12 @@
     var position       = 0;                       // current camera Z position (add playerZ to get player's absolute Z position)
     var speed          = 0;                       // current speed
     var maxSpeed       = segmentLength/step * speedMultiplier;      // top speed (ensure we can't move more than 1 segment in a single frame to make collision detection easier)
-    var accel          =  maxSpeed/5;             // acceleration rate - tuned until it 'felt' right
-    var breaking       = -maxSpeed;               // deceleration rate when braking
-    var decel          = -maxSpeed/5;             // 'natural' deceleration rate when neither accelerating, nor braking
-    var offRoadDecel   = -maxSpeed/2;             // off road deceleration is somewhere in between
+    var accel          =  maxSpeed/0.01;             // acceleration rate - tuned until it 'felt' right
+    var breaking       = false;               // deceleration rate when braking
+    var decel          = false;             // 'natural' deceleration rate when neither accelerating, nor braking
+    var offRoadDecel   = false;             // off road deceleration is somewhere in between
     var offRoadLimit   =  maxSpeed/4;             // limit when off road deceleration no longer applies (e.g. you can always go at least this speed even when off road)
-    var totalCars      = 40;                     // total number of cars on the road
+    var totalCars      = 200;                     // total number of cars on the road
     var currentLapTime = 0;                       // current lap time
     var lastLapTime    = null;                    // last lap time
 
@@ -244,7 +244,7 @@
           sprite  = playerSegment.sprites[n];
           spriteW = sprite.source.w * SPRITES.SCALE;
           if (Util.overlap(playerX, playerW, sprite.offset + spriteW/2 * (sprite.offset > 0 ? 1 : -1), spriteW)) {
-            speed = maxSpeed/5;
+            speed = maxSpeed/2;
             position = Util.increase(playerSegment.p1.world.z, -playerZ, trackLength); // stop in front of sprite (at front of segment)
             break;
           }
@@ -399,7 +399,7 @@
 
       // if no cars ahead, but I have somehow ended up off road, then steer back on
       if (car.offset < -0.9)
-        return 0.1;
+        return -0.1;
       else if (car.offset > 0.9)
         return -0.1;
       else
@@ -726,7 +726,7 @@
         { keys: [KEY.LEFT,  KEY.A], mode: 'down', action: function() { keyLeft   = true;  } },
         { keys: [KEY.RIGHT, KEY.D], mode: 'down', action: function() { keyRight  = true;  } },
         { keys: [KEY.UP,    KEY.W], mode: 'down', action: function() { keyFaster = true;  } },
-        { keys: [KEY.DOWN,  KEY.S], mode: 'down', action: function() { keySlower = true;  } },
+        { keys: [KEY.DOWN,  KEY.S], mode: 'down', action: function() { keySlower = false;  } },
         { keys: [KEY.LEFT,  KEY.A], mode: 'up',   action: function() { keyLeft   = false; } },
         { keys: [KEY.RIGHT, KEY.D], mode: 'up',   action: function() { keyRight  = false; } },
         { keys: [KEY.UP,    KEY.W], mode: 'up',   action: function() { keyFaster = false; } },
